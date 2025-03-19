@@ -52,21 +52,26 @@
             console.log("Getting your corkboard ready...")
 
             let c = localStorage.getItem("corkboard")
-            if (c) {
-                const all_cards = JSON.parse(c)
-                for (let i=0; i< all_cards.length; i++) {
-                    let card = $("<div><div>").addClass("draggable")
-                    card.append(`<h4>${all_cards[i].slug}</h4>`)
-                    card.append(`<p>${all_cards[i].scene}</p>`)
-                    card.draggable({containment: "#container"})
-                     $("#container").append(card)
+            if (c == null ) {
+                console.log("We found a null", c)
+                let card_set = [{"slug": "INT DAY", "scene": "A writer creates a card"}]
+                localStorage.setItem("corkboard", JSON.stringify(card_set))
+
                     
 
-                }
 
             } else {
-                localStorage.setItem("corkboard", "")
+                console.log("not null")
+                <!-- const all_cards = JSON.parse(c) -->
+                <!-- for (let i=0; i< all_cards.length; i++) { -->
+                <!--     let card = $("<div><div>").addClass("draggable") -->
+                <!--     card.append(`<h4>${all_cards[i].slug}</h4>`) -->
+                <!--     card.append(`<p>${all_cards[i].scene}</p>`) -->
+                <!--     card.draggable({containment: "#container"}) -->
+                <!--      $("#container").append(card) -->
+                <!-- } -->
             }
+
 
 
 
