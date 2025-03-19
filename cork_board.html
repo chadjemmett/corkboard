@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 .draggable {
-    width: 100px;
+    width: 225px;
     height: 100px;
     background-color: lightblue;
     border: 1px solid black;
@@ -57,19 +57,18 @@
 <body>
 
     <h3 id="new_card">New Card</h3>
-    <div  id="card_modal" style="display: none;">
-        <div  class="modal_content">
+    <!-- <div  id="card_modal" style="display: none;"> -->
+        <div  class="">
             <span class="close">Close</span>
-            <form>
+            <form id="card_creator">
                 <label for="slug">Slug:</label><br>
                 <input type="text" id="slug"><br></br>
                 <label for="scene">Scene:</label><br>
-                <input type="text" id="scend"><br></br>
-                <input type="submit" value="submit">
+                <input type="text" id="scene"><br></br>
+                <input id="create_card" type="submit" value="submit">
             </form>
         </div>
 
-    </div>
 <div id='container'>
 
 <div class="draggable">Drag me!</div>
@@ -80,39 +79,39 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
-    let modal = $("#card_modal")
-    let btn = $("#card_modal")
-    $("#new_card").click(() => {
-        modal.css("display", "block")
 
-    })
+    const Cards = {
+        newCard: function() {
+            let slug = $("#slug")
+            let scene = $("#scene")
+            console.log(slug)
+            let card = $("<div><div>").addClass("draggable")
+            card.append(`<h4>${slug.val()}</h4>`)
+            card.append(`<p>${scene.val()}</p>`)
+            
+            card.draggable({containment: "#container"})
+            
+            $("#container").append(card)
+            $("#slug").val("")
+            $("#scene").val("")
+            
+        },
+    }
 
-    <!-- need a way to create the card with  the text -->
-    <!-- Need to be able to close the modal -->
-
-    $(window).click((event) => {
-        if (event.target== modal[0]) {
-            modal.css("display", "none")
-        }
-
-    } )
-
-
-    <!-- $('#new_card').click( ()=> { -->
-    <!--     let newDiv = $('<div>') -->
-    <!--     newDiv.text("Draggable") -->
-    <!--     newDiv.addClass("draggable") -->
-    <!--     $('#container').append(newDiv) -->
-    <!--     newDiv.draggable() -->
-
-        
-
-    <!-- }) -->
+    $(document).ready(() => {
+        $("#create_card").on("click", (event) => {
+            event.preventDefault()
+            Cards.newCard()
+        })
 
 
-    $( function() {
-        $( ".draggable" ).draggable({containment: "#container"});
-    } );
+   })
+
+
+
+
+
+
 </script>
 
 </body>
