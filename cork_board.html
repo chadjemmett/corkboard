@@ -27,7 +27,6 @@
 <body>
 
     <h3 id="new_card">New Card</h3>
-    <!-- <div  id="card_modal" style="display: none;"> -->
         <div  class="">
             <span class="close">Close</span>
             <form id="card_creator">
@@ -48,59 +47,40 @@
 <script>
 
     const Cards = {
-        init: function() {
-            console.log("Getting your corkboard ready...")
-
-            let c = localStorage.getItem("corkboard")
-            if (c == null ) {
-                console.log("We found a null", c)
-                let card_set = [{"slug": "INT DAY", "scene": "A writer creates a card"}]
-                localStorage.setItem("corkboard", JSON.stringify(card_set))
-
-                    
-
-
-            } else {
-                console.log("not null")
-                <!-- const all_cards = JSON.parse(c) -->
-                <!-- for (let i=0; i< all_cards.length; i++) { -->
-                <!--     let card = $("<div><div>").addClass("draggable") -->
-                <!--     card.append(`<h4>${all_cards[i].slug}</h4>`) -->
-                <!--     card.append(`<p>${all_cards[i].scene}</p>`) -->
-                <!--     card.draggable({containment: "#container"}) -->
-                <!--      $("#container").append(card) -->
-                <!-- } -->
-            }
-
-
-
-
-        },
-        newCard: function() {
-            let slug = $("#slug")
-            let scene = $("#scene")
+        newCard: function(slug, scene) {
             let card = $("<div><div>").addClass("draggable")
-            card.append(`<h4>${slug.val()}</h4>`)
-            card.append(`<p>${scene.val()}</p>`)
+            card.append(`<h4>${slug}</h4>`)
+            card.append(`<p>${scene}</p>`)
             card.draggable({containment: "#container"})
-            
             $("#container").append(card)
-            $("#slug").val("")
-            $("#scene").val("")
-            
         }
     }
 
     $(document).ready(() => {
-        Cards.init()
+        
+
         $("#create_card").on("click", (event) => {
             event.preventDefault()
             Cards.newCard()
         })
-
-
    })
 
+    $(function () {
+        const all_cards = localStorage.getItem("corkboard")
+        if (all_cards == null ) {
+            localStorage.setItem("corkboard", JSON.stringify([{"slug": "INT DAY", "scene": "A writer creates their first card"}]))
+            Cards.newCard("INT DAY", "A writer creates their first card")
+            
+        } else {
+            let data = JSON.parse(all_cards)
+            for (let i = 0;i<data.length; i++) {
+                Cards.newCard(data[i].slug, data[i].scene)
+            }
+            
+
+        }
+
+    })
 
 
 
