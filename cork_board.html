@@ -4,15 +4,18 @@
 <html>
 <head>
 <title>Cork Board</title>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> <style>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> 
+<style>
+body {
+    font: 1.2em sans-serif;
+}
 .draggable {
-    width: 225px;
+    max-width: 225px;
     height: 100px;
     background-color: lightblue;
     border: 1px solid black;
     cursor: move;
     text-align: center;
-    line-height: 100px;
 }
 
 #container {
@@ -49,7 +52,7 @@
     const Cards = {
         newCard: function(slug, scene) {
             let card = $("<div><div>").addClass("draggable")
-            card.append(`<h4>${slug}</h4>`)
+            card.append(`<div><h4>${slug}</h4></div>`)
             card.append(`<p>${scene}</p>`)
             card.draggable({containment: "#container"})
             $("#container").append(card)
