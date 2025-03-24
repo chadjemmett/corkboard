@@ -10,12 +10,17 @@ body {
     font: 1.2em sans-serif;
 }
 .draggable {
-    max-width: 225px;
+    max-width: 300px;
     height: 100px;
     background-color: lightblue;
     border: 1px solid black;
     cursor: move;
     text-align: center;
+}
+
+.slug {
+    text-align: left;
+    padding-left: 20px;
 }
 
 #container {
@@ -52,8 +57,8 @@ body {
     const Cards = {
         newCard: function(slug, scene) {
             let card = $("<div><div>").addClass("draggable")
-            card.append(`<div><h4>${slug}</h4></div>`)
-            card.append(`<p>${scene}</p>`)
+            card.append(`<div class='slug'>${slug}</div>`)
+            card.append(scene)
             card.draggable({containment: "#container"})
             $("#container").append(card)
         }
