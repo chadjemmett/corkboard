@@ -7,15 +7,19 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> 
 <style>
 body {
-    font: 1.2em sans-serif;
+    font: 1.1em sans-serif;
 }
 .draggable {
     max-width: 300px;
-    height: 100px;
+    height: 175px;
     background-color: lightblue;
     border: 1px solid black;
     cursor: move;
     text-align: center;
+    text-wrap: break-word;
+    overflow: hidden;
+    padding: 0 15px 0 15px;
+    
 }
 
 .slug {
@@ -58,7 +62,7 @@ body {
         newCard: function(slug, scene) {
             let card = $("<div><div>").addClass("draggable")
             card.append(`<div class='slug'>${slug}</div>`)
-            card.append(scene)
+            card.append(`<p>${scene}</p>`)
             card.draggable({containment: "#container"})
             $("#container").append(card)
         }
@@ -69,7 +73,11 @@ body {
 
         $("#create_card").on("click", (event) => {
             event.preventDefault()
-            Cards.newCard()
+            let slug = $("#slug")
+            let scene = $("#scene")
+            Cards.newCard(slug.val().toUpperCase(), scene.val())
+            slug.val("")
+            scene.val("")
         })
    })
 
