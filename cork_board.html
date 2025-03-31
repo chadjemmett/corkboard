@@ -59,11 +59,12 @@ body {
 <script>
 
     const Cards = {
-        newCard: function(slug, scene) {
+        newCard: function(slug, scene, id) {
             let card = $("<div><div>").addClass("draggable")
             card.append(`<div class='slug'>${slug}</div>`)
             card.append(`<p>${scene}</p>`)
             card.draggable({containment: "#container"})
+            card.attr("id", id)
             $("#container").append(card)
         }
     }
@@ -73,11 +74,16 @@ body {
 
         $("#create_card").on("click", (event) => {
             event.preventDefault()
+            const date = new Date()
+            const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
+            console.log(card_id)
+
             let slug = $("#slug")
             let scene = $("#scene")
-            Cards.newCard(slug.val().toUpperCase(), scene.val())
+            Cards.newCard(slug.val().toUpperCase(), scene.val(), card_id)
             slug.val("")
             scene.val("")
+
         })
    })
 
@@ -90,6 +96,8 @@ body {
         } else {
             let data = JSON.parse(all_cards)
             for (let i = 0;i<data.length; i++) {
+                <!-- #with an ID number we need to come up with a NEW way to create cards. We'll have to  check for existing -->
+                <!-- cards -->
                 Cards.newCard(data[i].slug, data[i].scene)
             }
             
