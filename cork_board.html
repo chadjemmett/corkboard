@@ -1,144 +1,102 @@
-<!DOCTYPE>
-
 <!DOCTYPE html>
 <html>
-<head>
-<title>Cork Board</title>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> 
-<style>
-body {
-    font: 1.1em sans-serif;
-}
-.draggable {
-    max-width: 300px;
-    height: 175px;
-    background-color: lightblue;
-    border: 1px solid black;
-    cursor: move;
-    text-align: center;
-    text-wrap: break-word;
-    overflow: hidden;
-    padding: 0 15px 0 15px;
-    
-}
+    <head>
+        <title>Cork Board</title>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> 
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <h3 id="new_card">New Card</h3>
+            <div  class="">
+                <form id="card_creator">
+                    <label for="slug">Slug:</label><br>
+                    <input type="text" id="slug"><br></br>
+                    <label for="scene">Scene:</label><br>
+                    <input type="text" id="scene"><br></br>
+                    <input id="create_card" type="submit" value="submit">
+                </form>
+            </div>
 
-.slug {
-    text-align: left;
-    padding-left: 20px;
-}
-
-#container {
-    height: 100%;
-    width: 100%;
-    border: 1px  black solid;
-}
-
-
-</style>
-</head>
-<body>
-
-    <h3 id="new_card">New Card</h3>
-        <div  class="">
-            <span class="close">Close</span>
-            <form id="card_creator">
-                <label for="slug">Slug:</label><br>
-                <input type="text" id="slug"><br></br>
-                <label for="scene">Scene:</label><br>
-                <input type="text" id="scene"><br></br>
-                <input id="create_card" type="submit" value="submit">
-            </form>
+    <div id='container'>
+        <div class="draggable" id="123456789">
+            <div class="slug">INT DAY</div>
+            This is a scene where they do something
         </div>
 
-<div id='container'>
-    <div class="draggable" id="123456789">
-        <div class="slug">INT DAY</div>
-        This is a scene where they do something
+
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
 
-</div>
+        const Cards = {
 
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
+            initialize: function() {
+                const all_cards = localStorage.getItem("corkboard")
+                console.log(all_cards == 'null')
 
-    const Cards = {
-        CardLibrary: {},
-        newCard: function(slug, scene) {
-            // create an ID for the card
-            const date = new Date()
-            const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
-            console.log(this)
-            let card = {
-                "slug": slug.toUpperCase(), 
-                "scene": scene, 
-                "id": card_id, 
-                "x": 20,  
-                "y": 20 
+            },
+            CardLibrary: {},
+            newCard: function(slug, scene) {
+                // create an ID for the card
+                const date = new Date()
+                const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
+                let card = {
+                    "slug": slug.toUpperCase(), 
+                    "scene": scene, 
+                    "id": card_id, 
+                    "x": 20,  
+                    "y": 20 
+                }
+                this.CardLibrary[card.id] = card
+                return card
+            },
+            
+            updateCard: function(id, new_data) {
+                // new data needs to be an object withe the same keys as the card object
+                let card_edit = this.CardLibary[id]
+
+            },
+            saveCards: function() {
+                const cards = $(".draggable")
+
+                console.log("This will save the cards", cards)
+
+                
+
             }
-            this.CardLibrary[card.id] = card
-            return card
-        },
-        
-        updateCard: function(id, new_data) {
-            // new data needs to be an object withe the same keys as the card object
-            let card_edit = this.CardLibary[id]
-
+            
         }
-        saveCards: function() {
-            const cards = $(".draggable")
 
-            console.log("This will save the cards", cards)
-
+        $(document).ready(() => {
+            $("#123456789").draggable({containment: "#container"})
             
 
-        }
-        
-    }
+            $("#create_card").on("click", (event) => {
+                event.preventDefault()
+                const date = new Date()
+                const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
 
-    $(document).ready(() => {
-        
+                let slug = $("#slug")
+                let scene = $("#scene")
+                Cards.newCard(slug.val().toUpperCase(), scene.val())
+                slug.val("")
+                scene.val("")
 
-        $("#create_card").on("click", (event) => {
-            event.preventDefault()
-            const date = new Date()
-            const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
-            console.log(card_id)
+            })
+       })
 
-            let slug = $("#slug")
-            let scene = $("#scene")
-            Cards.newCard(slug.val().toUpperCase(), scene.val())
-            slug.val("")
-            scene.val("")
+        $(function () {
+            Cards.initialize()
 
         })
-   })
-
-    $(function () {
-        const all_cards = localStorage.getItem("corkboard")
-        if (all_cards == null ) {
-            localStorage.setItem("corkboard", JSON.stringify([{"slug": "INT DAY", "scene": "A writer creates their first card"}]))
-            Cards.newCard("INT DAY", "A writer creates their first card")
-            
-        } else {
-            let data = JSON.parse(all_cards)
-            for (let i = 0;i<data.length; i++) {
-                <!-- #with an ID number we need to come up with a NEW way to create cards. We'll have to  check for existing -->
-                <!-- cards -->
-                Cards.newCard(data[i].slug, data[i].scene)
-            }
-            
-
-        }
-
-    })
 
 
 
 
 
-</script>
+    </script>
 
-</body>
+    </body>
 </html>

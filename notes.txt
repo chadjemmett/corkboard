@@ -1,0 +1,19 @@
+This is for checking if there are cards in local storage.
+                if (all_cards == null ) {
+                    localStorage.setItem("corkboard", JSON.stringify([{"slug": "INT DAY", "scene": "A writer creates their first card"}]))
+                    Cards.newCard("INT DAY", "A writer creates their first card")
+                    
+                } else {
+                    let data = JSON.parse(all_cards)
+                    for (let i = 0;i<data.length; i++) {
+                        Cards.newCard(data[i].slug, data[i].scene)
+                    }
+                    
+
+                }
+
+
+April 5.
+    Working on a way to initalize the existing data from local storage.
+    If there is no data from local storage, then create the corkboard key and populate some basic card
+    information.
