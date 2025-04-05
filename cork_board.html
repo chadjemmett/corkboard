@@ -51,6 +51,11 @@ body {
         </div>
 
 <div id='container'>
+    <div class="draggable" id="123456789">
+        <div class="slug">INT DAY</div>
+        This is a scene where they do something
+    </div>
+
 
 </div>
 
@@ -59,14 +64,37 @@ body {
 <script>
 
     const Cards = {
-        newCard: function(slug, scene, id) {
-            let card = $("<div><div>").addClass("draggable")
-            card.append(`<div class='slug'>${slug}</div>`)
-            card.append(`<p>${scene}</p>`)
-            card.draggable({containment: "#container"})
-            card.attr("id", id)
-            $("#container").append(card)
+        CardLibrary: {},
+        newCard: function(slug, scene) {
+            // create an ID for the card
+            const date = new Date()
+            const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
+            console.log(this)
+            let card = {
+                "slug": slug.toUpperCase(), 
+                "scene": scene, 
+                "id": card_id, 
+                "x": 20,  
+                "y": 20 
+            }
+            this.CardLibrary[card.id] = card
+            return card
+        },
+        
+        updateCard: function(id, new_data) {
+            // new data needs to be an object withe the same keys as the card object
+            let card_edit = this.CardLibary[id]
+
         }
+        saveCards: function() {
+            const cards = $(".draggable")
+
+            console.log("This will save the cards", cards)
+
+            
+
+        }
+        
     }
 
     $(document).ready(() => {
@@ -80,7 +108,7 @@ body {
 
             let slug = $("#slug")
             let scene = $("#scene")
-            Cards.newCard(slug.val().toUpperCase(), scene.val(), card_id)
+            Cards.newCard(slug.val().toUpperCase(), scene.val())
             slug.val("")
             scene.val("")
 
