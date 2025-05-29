@@ -14,6 +14,10 @@ This is for checking if there are cards in local storage.
 
 
 April 5.
-    Working on a way to initalize the existing data from local storage.
-    If there is no data from local storage, then create the corkboard key and populate some basic card
-    information.
+   * Can create new cards. Can parti:ally draw cards. But when refreshing the page, the cards in the library dissapear. 
+   Therer's a problem with having CardLibary getting set to an empty object. Somehow it's resetting everythign
+   when reloading.
+
+
+April 6
+    The Draw card function draws all the cards. Even if  the cards are already drawn.:P

@@ -13,6 +13,12 @@
                     <input type="text" id="slug"><br></br>
                     <label for="scene">Scene:</label><br>
                     <input type="text" id="scene"><br></br>
+                    <select value="">
+                        <option value="lightblue">Blue</option>
+                        <option value="lightpink">Red</option>
+                        <option value="lightgreen">Green</option>
+                    </select>
+
                     <input id="create_card" type="submit" value="submit">
                 </form>
             </div>
@@ -30,73 +36,93 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
 
+        var CardLibrary = ""
         const Cards = {
-
             initialize: function() {
                 const all_cards = localStorage.getItem("corkboard")
-                console.log(all_cards == 'null')
-
+                if (all_cards == null ){
+                    console.log("Creating card storage...")
+                    localStorage.setItem("corkboard", '{}')
+                    this.newCard(
+                        "INT DAY",
+                        "A writer creates their first card",
+                        "lightblue"
+                    )
+                    CardLibrary = JSON.parse(all_cards)
+                } else {
+                    console.log("there are cards")
+                    this.saveCards()
+                    CardLibrary = JSON.parse(all_cards)
+                }
             },
-            CardLibrary: {},
-            newCard: function(slug, scene) {
+            newCard: function(slug, scene, color="lightblue") {
                 // create an ID for the card
                 const date = new Date()
                 const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
+                // set the card data
                 let card = {
                     "slug": slug.toUpperCase(), 
                     "scene": scene, 
                     "id": card_id, 
+                    "color": color,
                     "x": 20,  
                     "y": 20 
                 }
-                this.CardLibrary[card.id] = card
+                // add it to the library
+                CardLibrary[card.id] = card
+                //save the cards to local storage
+                this.saveCards()
                 return card
             },
-            
             updateCard: function(id, new_data) {
                 // new data needs to be an object withe the same keys as the card object
                 let card_edit = this.CardLibary[id]
-
             },
             saveCards: function() {
-                const cards = $(".draggable")
+                console.log("Saving the cards...")
+                localStorage.setItem('corkboard', JSON.stringify(CardLibrary))
+                },
+            drawCards: function() {
 
-                console.log("This will save the cards", cards)
+                let keys = Object.keys(CardLibrary)
+                const container = $("#container")
+                for (let i=0;i<keys.length; i++) {
+                    let new_div = $("<div>", {
+                                            id: CardLibrary[keys[i]].id,
+                                            text: CardLibrary[keys[i]].slug,
+                                            class: "draggable",
+                                            style: {"backgroundColor": CardLibrary[keys[i].color]}
+                                            })
+                    new_div.draggable({containment: "#container"})
+                    container.append(new_div)
+                }
 
                 
 
+
             }
-            
         }
 
         $(document).ready(() => {
+            Cards.initialize()
             $("#123456789").draggable({containment: "#container"})
             
 
             $("#create_card").on("click", (event) => {
-                event.preventDefault()
-                const date = new Date()
-                const card_id = `${date.getDay()}${date.getHours()}${date.getSeconds()}${date.getMilliseconds()}`
-
                 let slug = $("#slug")
                 let scene = $("#scene")
-                Cards.newCard(slug.val().toUpperCase(), scene.val())
+                if (slug.val() == "" || scene.val() == "") {
+                    console.log("No text. Flash the box")
+
+                } else {
+                    event.preventDefault()
+                    Cards.newCard(slug.val(), scene.val(), "lightblue")
+                }
                 slug.val("")
                 scene.val("")
 
             })
        })
-
-        $(function () {
-            Cards.initialize()
-
-        })
-
-
-
-
-
     </script>
-
     </body>
 </html>
