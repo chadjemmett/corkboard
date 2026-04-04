@@ -59,12 +59,28 @@ body {
 <script>
 
     const Cards = {
-        newCard: function(slug, scene) {
+        newCard: function(slug, scene, posX = 75, posY = 275, skipSave = false ) {
             let card = $("<div><div>").addClass("draggable")
             card.append(`<div class='slug'>${slug}</div>`)
             card.append(`<p>${scene}</p>`)
-            card.draggable({containment: "#container"})
+
+            card.css({left: posX, top: posY, position: 'absolute'})
+            card.draggable(
+                {
+                    containment: "#container",
+                    stop: () => this.saveToLocal()
+                });
+
             $("#container").append(card)
+            if (!skipSave) {
+                this.saveToLocal()
+            }
+        },
+
+        saveToLocal: function() {
+            console.log("WErking on saving")
+
+
         }
     }
 
